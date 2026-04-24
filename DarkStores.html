@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8' />
+    <title>Amsterdam Dark Stores Map</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+
+      .marker {
+        background-image: url('images/Marker%20Gorillas%20@2x.png');
+        background-size: cover;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      .marker2 {
+        background-image: url('images/Marker%20Getir@2x.png');
+        background-size: cover;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      .marker3 {
+        background-image: url('images/Marker%20Flink@2x.png');
+        background-size: cover;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      .marker4 {
+        background-image: url('images/Marker%20Zapp@2x.png');
+        background-size: cover;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
+      .mapboxgl-popup {
+        max-width: 200px;
+      }
+
+      .mapboxgl-popup-content {
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+      }
+    </style>
+</head>
+<body>
+
+<div id='map'></div>
+
+<script>
+
+mapboxgl.accessToken = 'pk.eyJ1IjoidG9tdmFuYXJtYW4iLCJhIjoiRDlFeWFVdyJ9.B6ZgpP0CsDlAF1D1emvosg';
+
+const map = new mapboxgl.Map({
+  container: 'map',
+  // mapbox://styles/tomvanarman/cl150286o000w14r5ptlr7rdz
+  style: 'mapbox://styles/tomvanarman/cl1f764qv000c14pkb61dif3l',
+  center: [4.9041, 52.3676],
+  zoom: 12
+});
+
+const geojson = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.84109135952342, 52.3528637423522]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Koningin Wilhelminaplein 33, 1062HJ'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.87116560606875, 52.3320688280184]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Arent Janszoon Ernststr 799, 1082LL'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.85654926584152, 52.3483635048602]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Karperstraat 19 H, 1075KW'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.88917733562598, 52.405202912622]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Kraanspoor 11, 1033SC'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.92965027944102, 52.3534811665143]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Kamerlingh Onneslaan 22, 1097DG'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.87920364472678, 52.3633520725434]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Stadhouderskade 5 H, 1054ES'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.8938629921174, 52.3560257918168]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Gerard Douplein 90 H, 1073XG'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.92868957945709, 52.3716530695293]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Isaac Titsinghkade 109, 1018LL'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.8772157015516, 52.3964697932866]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Danzigerbocht 21 A, 1013AM'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.90662816430729, 52.3650879147405]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Weesperstraat 61, 1018VN'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.86387971486347, 52.3705158583036]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Admiraal De Ruijterweg 21, 1057JT'
+      }
+    }
+  ]
+};
+
+const geojson2 = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.84151928520374, 52.3499336111704]
+      },
+      properties: {
+        title: 'Getir',
+        description: 'Delflandplein 2, 1062HR'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.94069422720902, 52.3982837930595]
+      },
+      properties: {
+        title: 'Getir',
+        description: 'Buikslotermeerplein 261, 1025XC'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.87408413028063, 52.3622075305349]
+      },
+      properties: {
+        title: 'Getir',
+        description: 'Overtoom 129 A - 131A, 1054HE'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.92910223927514, 52.3715227555143]
+      },
+      properties: {
+        title: 'Getir',
+        description: 'Isaac Titsinghkade 107, 1018LL'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.89179583595219, 52.3598851059086]
+      },
+      properties: {
+        title: 'Getir',
+        description: 'Weteringschans 165 C, 1017XD'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.87192773661084, 52.3694430761905]
+      },
+      properties: {
+        title: 'Getir',
+        description: 'Da Costakade 106 H, 1053WP'
+      }
+    }
+  ]
+};
+
+const geojson3 = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.97626775442925, 52.2974611388438]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Renswoudestraat 52, 1106BK'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.87308303775983, 52.3500284063791]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Apollolaan 151, 1077AR'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.79779123272109, 52.3518727321025]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Pieter Calandlaan 228 B, 1069LA'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.93959877612298, 52.3503871755626]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Helmholtzstraat 55 A, 1098LE'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.93490323723336, 52.3663762297781]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Zeeburgerdijk 55 H, 1094AA'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.87620759054946, 52.3955597761605]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Rigakade 10, 1013BC'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.87615656895929, 52.384397073931]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Van Limburg Stirumplein 1, 1051BD'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.87858274731221, 52.3654786803869]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Nassaukade 373 A, 1054AC'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.94035761486501, 52.3987922079918]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Buikslotermeerplein 307, 1025XE'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.96599474567513, 52.3339418030298]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Visseringweg 1 D, 1112AS'
+      }
+    }
+  ]
+};
+
+const geojson4 = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.86533989018936, 52.3851812727107]
+      },
+      properties: {
+        title: 'Zapp',
+        description: 'Haarlemmerweg 331 K, 1051LH'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.94546542091897, 52.3671603432948]
+      },
+      properties: {
+        title: 'Zapp',
+        description: 'Zeeburgerpad 89, 1019 AD'
+      }
+    }
+  ]
+};
+
+
+// add markers to map
+for (const feature of geojson.features) {
+  const el = document.createElement('div');
+  el.className = 'marker';
+  new mapboxgl.Marker(el)
+    .setLngLat(feature.geometry.coordinates)
+    .setPopup(
+      new mapboxgl.Popup({ offset: 25 })
+        .setHTML(
+          `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
+        )
+    )
+    .addTo(map);
+}
+
+for (const feature of geojson2.features) {
+  const el2 = document.createElement('div');
+  el2.className = 'marker2';
+  new mapboxgl.Marker(el2)
+    .setLngLat(feature.geometry.coordinates)
+    .setPopup(
+      new mapboxgl.Popup({ offset: 25 })
+        .setHTML(
+          `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
+        )
+    )
+    .addTo(map);
+}
+
+for (const feature of geojson3.features) {
+  const el3 = document.createElement('div');
+  el3.className = 'marker3';
+  new mapboxgl.Marker(el3)
+    .setLngLat(feature.geometry.coordinates)
+    .setPopup(
+      new mapboxgl.Popup({ offset: 25 })
+        .setHTML(
+          `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
+        )
+    )
+    .addTo(map);
+}
+
+for (const feature of geojson4.features) {
+  const el4 = document.createElement('div');
+  el4.className = 'marker4';
+  new mapboxgl.Marker(el4)
+    .setLngLat(feature.geometry.coordinates)
+    .setPopup(
+      new mapboxgl.Popup({ offset: 25 })
+        .setHTML(
+          `<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
+        )
+    )
+    .addTo(map);
+}
+
+</script>
+</body>
+</html>
