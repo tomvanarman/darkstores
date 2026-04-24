@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='utf-8' />
+    <title>Add custom markers in Mapbox GL JS</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <!-- Import Mapbox GL JS  -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
+    <!-- Import Assembly -->
+    <link href='https://api.mapbox.com/mapbox-assembly/v1.3.0/assembly.min.css' rel='stylesheet'>
+    <script src='https://api.mapbox.com/mapbox-assembly/v1.3.0/assembly.js'></script>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .marker {
+  background-image: url('https://images.squarespace-cdn.com/content/v1/5ccedd5b0cf57d4ffa03d88a/1648734976934-5WU7OLMOTO60KT8RI1QT/Marker+Gorillas+%402x.png?format=750w');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+       }
+      .marker2 {
+  background-image: url('https://images.squarespace-cdn.com/content/v1/5ccedd5b0cf57d4ffa03d88a/1648734976419-F509P2VJENEVNC0H3SSH/Marker+Getir%402x.png?format=750w');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+       }
+      .marker3 {
+  background-image: url('https://images.squarespace-cdn.com/content/v1/5ccedd5b0cf57d4ffa03d88a/1648734976369-5NT3EHOOSEFOQ75KW15L/Marker+Flink%402x.png?format=750w');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+       }
+      .marker4 {
+  background-image: url('https://images.squarespace-cdn.com/content/v1/5ccedd5b0cf57d4ffa03d88a/1648734977054-D40NR7PYZH9MW45C5YV2/Marker+Zapp%402x.png?format=750w Marker Zapp@2x.png');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+       }
+
+      .mapboxgl-popup {
+	max-width: 200px;
+      }
+      .mapboxgl-popup-content {
+	text-align: center;
+	font-family: 'Open Sans', sans-serif;
+      }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+
+<div class='absolute fl my24 mx24 py24 px24 bg-gray-faint round'>
+  <form id='params'>
+    <h4 class='txt-m txt-bold mb6'>See flash bike delivery range (10min):</h4>
+    <div class='mb12 mr12 toggle-group align-center'>
+      <label class='toggle-container'>
+        <input name='store' type='radio' value='Gorillas'>
+        <div class='toggle toggle--active-null toggle--null'><font color="#000000">Gorillas</font></div>
+      </label>
+      <label class='toggle-container'>
+        <input name='store' type='radio' value='Getir' checked>
+        <div class='toggle toggle--active-null toggle--null'><font color="#000000">Getir</font></div>
+      </label>
+      <label class='toggle-container'>
+        <input name='store' type='radio' value='Flink'>
+        <div class='toggle toggle--active-null toggle--null'><font color="#000000">Flink</font></div>
+      </label>
+      <label class='toggle-container'>
+        <input name='store' type='radio' value='Zapp'>
+        <div class='toggle toggle--active-null toggle--null'><font color="#000000">Zapp</font></div>
+      </label>
+    </div>
+
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoidG9tdmFuYXJtYW4iLCJhIjoiRDlFeWFVdyJ9.B6ZgpP0CsDlAF1D1emvosg';
+
+
+const map = new mapboxgl.Map({
+  container: 'map',
+// mapbox://styles/tomvanarman/cl150286o000w14r5ptlr7rdz
+  style: 'mapbox://styles/tomvanarman/cl1p73q9h000a14o9133zn7qn',
+  center: [4.9041, 52.3676],
+  zoom: 12
+});
+
+
+// code from the next step will go here!
+const geojson = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.84109135952342, 52.3528637423522]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Koningin Wilhelminaplein 33, 1062HJ'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.87116560606875,  52.3320688280184]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Arent Janszoon Ernststr 799, 1082LL'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [  4.85654926584152, 52.3483635048602]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Karperstraat 19 H, 1075KW'
+      }	
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [ 4.88917733562598,  52.405202912622]
+      }, 
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Kraanspoor 11, 1033SC'
+      }	
+     },
+     {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [ 4.92965027944102, 52.3534811665143]
+      }, 
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Kamerlingh Onneslaan 22, 1097DG'
+      }	
+     },
+
+     {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [ 4.87920364472678, 52.3633520725434]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Stadhouderskade 5 H, 1054ES'
+      }	
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [ 4.8938629921174, 52.3560257918168]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Gerard Douplein 90 H, 1073XG'
+      }	
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [ 4.92868957945709, 52.3716530695293]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Isaac Titsinghkade 109, 1018LL'
+      }	
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [ 4.8772157015516, 52.3964697932866]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Danzigerbocht 21 A, 1013AM'
+      }	
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [ 4.90662816430729, 52.3650879147405]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Weesperstraat 61, 1018VN'
+      }	
+    },
+
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [ 4.86387971486347 , 52.3705158583036]
+      },
+      properties: {
+        title: 'Gorillas Technologies Netherlands B.V.',
+        description: 'Admiraal De Ruijterweg 21, 1057JT'
+      }	
+    }
+  ]
+}
+
+const geojson2 = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.84151928520374 , 52.3499336111704]
+      },
+      properties: {
+        title: 'Getir',
+        description: 'Delflandplein 2, 1062HR'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.94069422720902 , 52.3982837930595]
+      },
+      properties: {
+        title: 'Getir',
+        description: 'Buikslotermeerplein 261, 1025XC'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.87408413028063, 52.3622075305349]
+      },
+      properties: {
+        title: 'Getir',
+        description: 'Overtoom 129 A - 131A, 1054HE'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.92910223927514, 52.3715227555143]
+      },
+      properties: {
+        title: 'Getir',
+        description: 'Isaac Titsinghkade 107, 1018LL'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.89179583595219, 52.3598851059086]
+      },
+      properties: {
+        title: 'Getir',
+        description: 'Weteringschans 165 C, 1017XD'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.87192773661084, 52.3694430761905]
+      },
+      properties: {
+        title: 'Getir',
+        description: 'Da Costakade 106 H, 1053WP'
+      }
+    }
+]
+};
+
+const geojson3 = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.97626775442925, 52.2974611388438]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Renswoudestraat 52, 1106BK'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.87308303775983, 52.3500284063791]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Apollolaan 151, 1077AR'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.79779123272109 , 52.3518727321025]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Pieter Calandlaan 228 B, 1069LA'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.93959877612298, 52.3503871755626]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Helmholtzstraat 55 A, 1098LE'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.93490323723336, 52.3663762297781]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Zeeburgerdijk 55 H, 1094AA'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.87620759054946, 52.3955597761605]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Rigakade 10, 1013BC'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.87615656895929, 52.384397073931]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Van Limburg Stirumplein 1, 1051BD'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.87858274731221, 52.3654786803869]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Nassaukade 373 A, 1054AC'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.94035761486501, 52.3987922079918]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Buikslotermeerplein 307, 1025XE'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.96599474567513, 52.3339418030298]
+      },
+      properties: {
+        title: 'Flink',
+        description: 'Visseringweg 1 D, 1112AS'
+      }
+    }
+]
+};
+
+const geojson4 = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.86533989018936, 52.3851812727107]
+      },
+      properties: {
+        title: 'Zapp',
+        description: 'Haarlemmerweg 331 K, 1051LH'
+      }
+    },
+    {
+      type: 'Feature',
+      geometry: {
+        type: 'Point',
+        coordinates: [4.94546542091897, 52.3671603432948]
+      },
+      properties: {
+        title: 'Zapp',
+        description: 'Zeeburgerpad 89, 1019 AD'
+      }
+    }
+]
+};
+
+// Create constants to use in getIso()
+const urlBase = 'https://api.mapbox.com/isochrone/v1/mapbox/';
+
+const profile = 'cycling'; // Set the default routing profile
+const minutes = 10; // Set the default duration
+
+
+// Create a function that sets up the Isochrone API query then makes an fetch call
+
+// 1 -> 11: Gorillas
+async function getIso1() {
+  const query1 = await fetch(
+    `${urlBase}${profile}/4.84109135952342,52.3528637423522?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data1 = await query1.json();
+  // Set the 'iso' source's data to what's returned by the API query
+  map.getSource('iso1').setData(data1);
+}
+async function getIso2() {
+  const query2 = await fetch(
+    `${urlBase}${profile}/4.87116560606875,52.3320688280184?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data2 = await query2.json();
+  // Set the 'iso' source's data to what's returned by the API query
+  map.getSource('iso2').setData(data2);
+}
+async function getIso3() {
+  const query3 = await fetch(
+    `${urlBase}${profile}/4.85654926584152,52.3483635048602?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data3 = await query3.json();
+  // Set the 'iso' source's data to what's returned by the API query
+  map.getSource('iso3').setData(data3);
+}
+async function getIso4() {
+  const query4 = await fetch(
+    `${urlBase}${profile}/4.88917733562598,52.405202912622?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data4 = await query4.json();
+  // Set the 'iso' source's data to what's returned by the API query
+  map.getSource('iso4').setData(data4);
+}
+async function getIso5() {
+  const query5 = await fetch(
+    `${urlBase}${profile}/4.92965027944102,52.3534811665143?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data5 = await query5.json();
+  // Set the 'iso' source's data to what's returned by the API query
+  map.getSource('iso5').setData(data5);
+}
+async function getIso6() {
+  const query6 = await fetch(
+    `${urlBase}${profile}/4.87920364472678,52.3633520725434?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data6 = await query6.json();
+  // Set the 'iso' source's data to what's returned by the API query
+  map.getSource('iso6').setData(data6);
+}
+async function getIso7() {
+  const query7 = await fetch(
+    `${urlBase}${profile}/4.8938629921174,52.3560257918168?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data7 = await query7.json();
+  // Set the 'iso' source's data to what's returned by the API query
+  map.getSource('iso7').setData(data7);
+}
+async function getIso8() {
+  const query8 = await fetch(
+    `${urlBase}${profile}/4.92868957945709,52.3716530695293?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data8 = await query8.json();
+  // Set the 'iso' source's data to what's returned by the API query
+  map.getSource('iso8').setData(data8);
+}
+async function getIso9() {
+  const query9 = await fetch(
+    `${urlBase}${profile}/4.8772157015516,52.3964697932866?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data9 = await query9.json();
+  // Set the 'iso' source's data to what's returned by the API query
+  map.getSource('iso9').setData(data9);
+}
+async function getIso10() {
+  const query10 = await fetch(
+    `${urlBase}${profile}/4.90662816430729,52.3650879147405?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data10 = await query10.json();
+  // Set the 'iso' source's data to what's returned by the API query
+  map.getSource('iso10').setData(data10);
+}
+async function getIso11() {
+  const query11 = await fetch(
+    `${urlBase}${profile}/4.86387971486347,52.3705158583036?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data11 = await query11.json();
+  // Set the 'iso' source's data to what's returned by the API query
+  map.getSource('iso11').setData(data11);
+}
+// 12 -> 17: Getir
+
+async function getIso12() {
+  const query12 = await fetch(
+    `${urlBase}${profile}/4.84151928520374,52.3499336111704?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data12 = await query12.json();
+  // Set the 'iso' source's data to what's returned by the API query
+  map.getSource('iso12').setData(data12);
+}
+async function getIso13() {
+  const query13 = await fetch(
+    `${urlBase}${profile}/4.94069422720902,52.3982837930595?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data13 = await query13.json();
+  // Set the 'iso' source's data to what's returned by the API query
+  map.getSource('iso13').setData(data13);
+}
+async function getIso14() {
+  const query14 = await fetch(
+    `${urlBase}${profile}/4.87408413028063,52.3622075305349?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data14 = await query14.json();
+  map.getSource('iso14').setData(data14);
+}
+
+async function getIso15() {
+  const query15 = await fetch(
+    `${urlBase}${profile}/4.92910223927514,52.3715227555143?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data15 = await query15.json();
+  map.getSource('iso15').setData(data15);
+}
+async function getIso16() {
+  const query16 = await fetch(
+    `${urlBase}${profile}/4.89179583595219,52.3598851059086?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data16 = await query16.json();
+  map.getSource('iso16').setData(data16);
+}
+async function getIso17() {
+  const query17 = await fetch(
+    `${urlBase}${profile}/4.87192773661084,52.3694430761905?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data17 = await query17.json();
+  map.getSource('iso17').setData(data17);
+}
+// 18->27: Flink
+async function getIso18() {
+  const query18 = await fetch(
+    `${urlBase}${profile}/4.97626775442925,52.2974611388438?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data18 = await query18.json();
+  map.getSource('iso18').setData(data18);
+}
+async function getIso19() {
+  const query19 = await fetch(
+    `${urlBase}${profile}/4.87308303775983,52.3500284063791?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data19 = await query19.json();
+  map.getSource('iso19').setData(data19);
+}
+async function getIso20() {
+  const query20 = await fetch(
+    `${urlBase}${profile}/4.79779123272109,52.3518727321025?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data20 = await query20.json();
+  map.getSource('iso20').setData(data20);
+}
+async function getIso21() {
+  const query21 = await fetch(
+    `${urlBase}${profile}/4.93959877612298,52.3503871755626?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data21 = await query21.json();
+  map.getSource('iso21').setData(data21);
+}
+async function getIso22() {
+  const query22 = await fetch(
+    `${urlBase}${profile}/4.93490323723336,52.3663762297781?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data22 = await query22.json();
+  map.getSource('iso22').setData(data22);
+}
+async function getIso23() {
+  const query23 = await fetch(
+    `${urlBase}${profile}/4.87620759054946,52.3955597761605?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data23 = await query23.json();
+  map.getSource('iso23').setData(data23);
+}
+async function getIso24() {
+  const query24 = await fetch(
+    `${urlBase}${profile}/4.87615656895929,52.384397073931?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data24 = await query24.json();
+  map.getSource('iso24').setData(data24);
+}
+async function getIso25() {
+  const query25 = await fetch(
+    `${urlBase}${profile}/4.87858274731221,52.3654786803869?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data25 = await query25.json();
+  map.getSource('iso25').setData(data25);
+}
+async function getIso26() {
+  const query26 = await fetch(
+    `${urlBase}${profile}/4.94035761486501,52.3987922079918?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data26 = await query26.json();
+  map.getSource('iso26').setData(data26);
+}
+async function getIso27() {
+  const query27 = await fetch(
+    `${urlBase}${profile}/4.96599474567513,52.3339418030298?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data27 = await query27.json();
+  map.getSource('iso27').setData(data27);
+}
+
+// 28 & 29: Zapp
+async function getIso28() {
+  const query28 = await fetch(
+    `${urlBase}${profile}/4.86533989018936,52.3851812727107?contours_minutes=${minutes}&contours_colors=F1C40F&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data28 = await query28.json();
+  map.getSource('iso28').setData(data28);
+}
+async function getIso29() {
+  const query29 = await fetch(
+    `${urlBase}${profile}/4.94546542091897,52.3671603432948?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+    { method: 'GET' }
+  );
+  const data29 = await query29.json();
+  map.getSource('iso29').setData(data29);
+}
+
+
+// add markers to map
+for (const feature of geojson.features) {
+// create a HTML element for each feature
+const el = document.createElement('div');
+el.className = 'marker';
+// make a marker for each feature and add it to the map
+new mapboxgl.Marker(el)
+.setLngLat(feature.geometry.coordinates)
+.setPopup(
+new mapboxgl.Popup({ offset: 25 }) // add popups
+.setHTML(
+`<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
+)
+)
+.addTo(map);
+}
+
+for (const feature of geojson2.features) {
+// create a HTML element for each feature
+const el2 = document.createElement('div');
+el2.className = 'marker2';
+// make a marker for each feature and add it to the map
+new mapboxgl.Marker(el2)
+.setLngLat(feature.geometry.coordinates)
+.setPopup(
+new mapboxgl.Popup({ offset: 25 }) // add popups
+.setHTML(
+`<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
+)
+)
+.addTo(map);
+}
+
+for (const feature of geojson3.features) {
+// create a HTML element for each feature
+const el3 = document.createElement('div');
+el3.className = 'marker3';
+// make a marker for each feature and add it to the map
+new mapboxgl.Marker(el3)
+.setLngLat(feature.geometry.coordinates)
+.setPopup(
+new mapboxgl.Popup({ offset: 25 }) // add popups
+.setHTML(
+`<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
+)
+)
+.addTo(map);
+}
+
+for (const feature of geojson4.features) {
+// create a HTML element for each feature
+const el4 = document.createElement('div');
+el4.className = 'marker4';
+// make a marker for each feature and add it to the map
+new mapboxgl.Marker(el4)
+.setLngLat(feature.geometry.coordinates)
+.setPopup(
+new mapboxgl.Popup({ offset: 25 }) // add popups
+.setHTML(
+`<h3>${feature.properties.title}</h3><p>${feature.properties.description}</p>`
+)
+)
+.addTo(map);
+}
+
+// Target the "params" form in the HTML portion of your code
+const params = document.getElementById('params');
+
+map.on('load', () => {
+	map.addSource('iso1', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso2', {
+		type: 'geojson',
+		data: {
+                	type: 'FeatureCollection',
+                	features: []
+		}
+	});
+	map.addSource('iso3', {
+    		type: 'geojson',
+    		data: {
+      			type: 'FeatureCollection',
+      			features: []
+    		}
+	});
+	map.addSource('iso4', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso5', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso6', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso7', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso8', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso9', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso10', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso11', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso12', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso13', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+      			features: []
+    		}
+	});
+	map.addSource('iso14', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso15', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso16', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+ 			features: []
+		}
+	});
+	map.addSource('iso17', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso18', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso19', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso20', {
+ 		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso21', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso22', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso23', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso24', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso25', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso26', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso27', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso28', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addSource('iso29', {
+		type: 'geojson',
+		data: {
+			type: 'FeatureCollection',
+			features: []
+		}
+	});
+	map.addLayer(
+	  {
+		id: 'isoLayer1',
+		type: 'fill',
+		source: 'iso1',
+		layout: {},
+		paint: {
+			'fill-color': '#FF0000',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer2',
+		type: 'fill',
+		source: 'iso2',
+		layout: {},
+		paint: {
+			'fill-color': '#FF0000',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer3',
+		type: 'fill',
+		source: 'iso3',
+		layout: {},
+		paint: {
+			'fill-color': '#FF0000',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer4',
+		type: 'fill',
+		source: 'iso4',
+		layout: {},
+		paint: {
+			'fill-color': '#FF0000',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer5',
+		type: 'fill',
+		source: 'iso5',
+		layout: {},
+		paint: {
+			'fill-color': '#FF0000',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer6',
+ 		type: 'fill',
+		source: 'iso6',
+		layout: {},
+		paint: {
+			'fill-color': '#FF0000',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer7',
+		type: 'fill',
+		source: 'iso7',
+		layout: {},
+		paint: {
+			'fill-color': '#FF0000',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer8',
+		type: 'fill',
+		source: 'iso8',
+		layout: {},
+		paint: {
+			'fill-color': '#FF0000',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+
+	map.addLayer(
+	  {
+		id: 'isoLayer9',
+		type: 'fill',
+		source: 'iso9',
+		layout: {},
+		paint: {
+			'fill-color': '#FF0000',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer10',
+		type: 'fill',
+		source: 'iso10',
+		layout: {},
+		paint: {
+			'fill-color': '#FF0000',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	 {
+		id: 'isoLayer11',
+		type: 'fill',
+		source: 'iso11',
+		layout: {},
+		paint: {
+			'fill-color': '#FF0000',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer12',
+		type: 'fill',
+		source: 'iso12',
+		layout: {},
+		paint: {
+			'fill-color': '#9400D3',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer13',
+		type: 'fill',
+		source: 'iso13',
+		layout: {},
+		paint: {
+			'fill-color': '#9400D3',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer14',
+		type: 'fill',
+		source: 'iso14',
+		layout: {},
+		paint: {
+			'fill-color': '#9400D3',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer15',
+		type: 'fill',
+		source: 'iso15',
+		layout: {},
+		paint: {
+			'fill-color': '#9400D3',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer16',
+		type: 'fill',
+		source: 'iso16',
+		layout: {},
+		paint: {
+			'fill-color': '#9400D3',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer17',
+		type: 'fill',
+		source: 'iso17',
+		layout: {},
+		paint: {
+			'fill-color': '#9400D3',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer18',
+		type: 'fill',
+		source: 'iso18',
+		layout: {},
+		paint: {
+			'fill-color': '#FF69B4',
+			'fill-opacity': 0.3
+		}
+	  },
+ 	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer19',
+		type: 'fill',
+		source: 'iso19',
+		layout: {},
+		paint: {
+			'fill-color': '#FF69B4',
+ 			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer20',
+		type: 'fill',
+		source: 'iso20',
+		layout: {},
+		paint: {
+			'fill-color': '#FF69B4',
+			'fill-opacity': 0.3
+		}
+	  },
+ 	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer21',
+		type: 'fill',
+		source: 'iso21',
+		layout: {},
+		paint: {
+			'fill-color': '#FF69B4',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer22',
+		type: 'fill',
+		source: 'iso22',
+		layout: {},
+		paint: {
+			'fill-color': '#FF69B4',
+ 			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer23',
+		type: 'fill',
+		source: 'iso23',
+		layout: {},
+		paint: {
+ 			'fill-color': '#FF69B4',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+ 	map.addLayer(
+	  {
+		id: 'isoLayer24',
+		type: 'fill',
+		source: 'iso24',
+		layout: {},
+		paint: {
+			'fill-color': '#FF69B4',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer25',
+		type: 'fill',
+		source: 'iso25',
+		layout: {},
+		paint: {
+			'fill-color': '#FF69B4',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer26',
+		type: 'fill',
+		source: 'iso26',
+		layout: {},
+		paint: {
+			'fill-color': '#FF69B4',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer27',
+ 		type: 'fill',
+		source: 'iso27',
+		layout: {},
+ 		paint: {
+			'fill-color': '#FF69B4',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer28',
+		type: 'fill',
+		source: 'iso28',
+		layout: {},
+		paint: {
+			'fill-color': '#00FFFF',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	map.addLayer(
+	  {
+		id: 'isoLayer29',
+		type: 'fill',
+		source: 'iso29',
+		layout: {},
+		paint: {
+			'fill-color': '#00FFFF',
+			'fill-opacity': 0.3
+		}
+	  },
+	  'poi-label'
+	);
+	getIso1();
+	getIso2();
+	getIso3();
+	getIso4();
+	getIso5();
+	getIso6();
+	getIso7();
+	getIso8();
+	getIso9();
+	getIso10();
+	getIso11();
+	getIso12();
+	getIso13();
+	getIso14();
+	getIso15();
+	getIso16();
+	getIso17();
+	getIso18();
+	getIso19();
+	getIso20();
+	getIso21();
+	getIso22();
+	getIso23();
+	getIso24();
+	getIso25();
+	getIso26();
+	getIso27();
+	getIso28();
+	getIso29();
+
+});
+
+// When a user changes the value of store by clicking a button, change the parameter's value and make the API query again
+params.addEventListener('change', (event) => {
+   if (event.target.value === "Gorillas") {
+	getIso1();
+	getIso2();
+	getIso3();
+	getIso4();
+	getIso5();
+	getIso6();
+	getIso7();
+	getIso8();
+	getIso9();
+	getIso10();
+	getIso11();
+	map.setLayoutProperty('isoLayer1', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer2', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer3', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer4', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer5', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer6', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer7', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer8', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer9', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer10', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer11', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer12', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer13', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer14', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer15', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer16', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer17', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer18', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer19', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer20', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer21', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer22', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer23', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer24', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer25', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer26', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer27', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer28', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer29', 'visibility', 'none');
+
+
+   } else if ( event.target.value === "Getir"){
+	
+	getIso12();
+	getIso13();
+	getIso14();
+	getIso15();
+	getIso16();
+	getIso17();
+	map.setLayoutProperty('isoLayer1', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer2', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer3', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer4', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer5', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer6', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer7', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer8', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer9', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer10', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer11', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer12', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer13', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer14', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer15', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer16', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer17', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer18', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer19', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer20', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer21', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer22', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer23', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer24', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer25', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer26', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer27', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer28', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer29', 'visibility', 'none');
+
+
+
+   } else if ( event.target.value === "Flink"){
+	
+	
+	getIso18();
+	getIso19();
+	getIso20();
+	getIso21();
+	getIso22();
+	getIso23();
+	getIso24();
+	getIso25();
+	getIso26();
+	getIso27();
+	map.setLayoutProperty('isoLayer1', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer2', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer3', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer4', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer5', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer6', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer7', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer8', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer9', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer10', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer11', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer12', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer13', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer14', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer15', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer16', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer17', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer18', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer19', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer20', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer21', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer22', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer23', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer24', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer25', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer26', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer27', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer28', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer29', 'visibility', 'none');
+
+   } else if ( event.target.value === "Zapp"){
+	getIso28();
+	getIso29();
+	map.setLayoutProperty('isoLayer1', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer2', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer3', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer4', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer5', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer6', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer7', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer8', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer9', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer10', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer11', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer12', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer13', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer14', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer15', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer16', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer17', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer18', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer19', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer20', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer21', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer22', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer23', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer24', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer25', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer26', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer27', 'visibility', 'none');
+	map.setLayoutProperty('isoLayer28', 'visibility', 'visible');
+	map.setLayoutProperty('isoLayer29', 'visibility', 'visible');
+
+   }
+});
+
+
+</script>
+</body>
+</html>
